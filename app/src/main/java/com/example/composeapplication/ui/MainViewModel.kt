@@ -1,10 +1,12 @@
 package com.example.composeapplication.ui
 
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import com.example.composeapplication.data.PokemonPagingSource
 import com.example.composeapplication.domain.model.onePokemonResponse.OnePokemonResponse
 import com.example.composeapplication.domain.repositories.ApiPokemonRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel(
@@ -14,10 +16,15 @@ class MainViewModel(
     private val _pokemonLiveData = MutableLiveData<OnePokemonResponse>()
     val pokemonResponse:LiveData<OnePokemonResponse> = _pokemonLiveData
 
-    fun loadPokemon(id:Int){
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
+    val pokemonPaging by lazy {
+        Pager(
+            PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            )
+        ){
+            PokemonPagingSource(apiPokemonRepository)
+        }.flow.cachedIn(viewModelScope)
     }
     class Factory @Inject constructor(
         private val apiPokemonRepository: ApiPokemonRepository

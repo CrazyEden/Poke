@@ -3,7 +3,7 @@ package com.example.composeapplication.domain.model.pokemonPage
 
 import com.google.gson.annotations.SerializedName
 
-data class Result(
+data class ShortPokemonInfo(
     @SerializedName("name")
     val name: String,
     @SerializedName("url")
