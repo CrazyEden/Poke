@@ -1,7 +1,6 @@
 package com.example.composeapplication.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,7 +23,6 @@ class MainActivity : ComponentActivity() {
         appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
-            Toast.makeText(this,"",Toast.LENGTH_LONG).show()
             ComposeApplicationTheme(){
                 val hostController = rememberNavController()
                 NavHost(

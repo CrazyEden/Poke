@@ -1,29 +1,36 @@
 package com.example.composeapplication.ui.theme
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
-import com.example.composeapplication.domain.model.pokemonPage.ShortPokemonInfo
+import coil.compose.AsyncImage
+import com.example.composeapplication.ui.PokemonListOneItemData
 
 @Composable
 fun PokeListScreen(
     navController: NavController,
-    list:LazyPagingItems<ShortPokemonInfo>
+    list:LazyPagingItems<PokemonListOneItemData>
 ){
     Box (
         modifier = Modifier
@@ -31,13 +38,18 @@ fun PokeListScreen(
             .background(Color.White)
     ) {
         Column (modifier = Modifier.fillMaxWidth()) {
-            SearchBar(callBack = {
-
-            })
-            LazyColumn(modifier = Modifier.fillMaxSize()){
-                items(list){item ->
-                    PokeItem(item!!)
+            SearchBar(
+                onTextEdited = {
+                TODO()
                 }
+            )
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ){
+                items(list){item ->
+                    PokeItem(item!!,navController)
+                }
+
                 if (list.loadState.refresh is LoadState.Error)
                     item{
                         ErrorItem()
@@ -58,26 +70,51 @@ fun ErrorItem() {
 }
 
 @Composable
-fun PokeItem(item: ShortPokemonInfo) {
-    Text(
+fun PokeItem(
+    item: PokemonListOneItemData,
+    navController: NavController
+) {
+    Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp)
-            .background(Color.LightGray, CircleShape)
-            .padding(4.dp),
-        text = "Имя: ${item.name}"
-    )
+            .fillMaxSize()
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("poke_info/${item.id}")
+            },
+        shape = CircleShape,
+        elevation = 5.dp,
+        border = BorderStroke(3.dp,Color.DarkGray)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            AsyncImage(
+                modifier = Modifier.size(200.dp),
+                model = item.imageUrl,
+                placeholder = painterResource(com.example.composeapplication.R.drawable.pokeball_place_holder),
+                contentDescription = item.name,
+
+            )
+            Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(2.dp)
+                    .background(Color.LightGray, CircleShape)
+                    .padding(4.dp)
+                    .padding(horizontal = 10.dp),
+                text = item.name,
+            )
+        }
+    }
 }
 
 @Composable
 fun SearchBar(
-    callBack: (String) -> Unit
+    onTextEdited: (String) -> Unit
 ){
     val text = remember {
         mutableStateOf("")
-    }
-    val isHintDisplayed = remember {
-        mutableStateOf(true)
     }
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -86,19 +123,15 @@ fun SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(8.dp, CircleShape)
-                .background(Color.White, CircleShape)
-                .padding(13.dp),
+                .background(Color.White, CircleShape),
             value = text.value,
             onValueChange = {
-                isHintDisplayed.value = it == ""
                 text.value = it
-                callBack(it)
+                onTextEdited(it)
             },
             singleLine = true,
             textStyle = TextStyle(color = Color.Green),
-            label = {
-                Text(text = "Поиск")
-            }
+            label = { Text(text = "Поиск") }
         )
 
 

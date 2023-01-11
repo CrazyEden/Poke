@@ -14,12 +14,13 @@ import androidx.compose.ui.unit.dp
 import com.example.composeapplication.R
 
 @Composable
-fun ItemPokemon(name:String){
+fun PokemonInfoScreen(){
     Box(Modifier
         .fillMaxWidth()
         .padding(20.dp)
-        .background(Color.Cyan)) {
+        .background(Color.Cyan)
+    ) {
         Image(painter = painterResource(id = R.drawable.img), contentDescription ="" )
-        Text(text =name)
+        Text(text ="name")
     }
 }
