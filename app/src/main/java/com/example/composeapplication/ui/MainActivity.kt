@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.composeapplication.appComponent
 import com.example.composeapplication.ui.theme.ComposeApplicationTheme
 import com.example.composeapplication.ui.theme.PokeListScreen
@@ -32,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     composable(route = "poke_list"){
                         PokeListScreen(
                             navController = hostController,
-                            vModel.pokemonPaging.collectAsLazyPagingItems()
+                            vModel
                         )
                     }
                     composable(

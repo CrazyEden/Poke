@@ -16,16 +16,19 @@ class MainViewModel(
     private val _pokemonLiveData = MutableLiveData<OnePokemonResponse>()
     val pokemonResponse:LiveData<OnePokemonResponse> = _pokemonLiveData
 
-    val pokemonPaging by lazy {
+    fun pokemonPaging(filter:String) =
         Pager(
             PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = false
             )
         ){
-            PokemonPagingSource(apiPokemonRepository)
+            PokemonPagingSource(
+                apiPokemonRepository = apiPokemonRepository,
+                filter = filter
+            )
         }.flow.cachedIn(viewModelScope)
-    }
+
     class Factory @Inject constructor(
         private val apiPokemonRepository: ApiPokemonRepository
     ):ViewModelProvider.Factory{

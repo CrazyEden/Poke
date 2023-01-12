@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui.theme
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -27,18 +25,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.example.composeapplication.ui.MainViewModel
 import com.example.composeapplication.ui.PokemonListOneItemData
 
 @Composable
 fun PokeListScreen(
     navController: NavController,
-    list:LazyPagingItems<PokemonListOneItemData>
+    vModel: MainViewModel
 ){
     val pokeFilter = rememberSaveable {
         mutableStateOf("")
     }
+    val list = vModel.pokemonPaging(pokeFilter.value).collectAsLazyPagingItems()
+//    val a = rememberSaveable {
+//        mutableStateOf(vModel.pokemonPaging(pokeFilter.value))
+//    }
+//    a.value.collectAsLazyPagingItems()
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -50,31 +54,15 @@ fun PokeListScreen(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Fixed(2)
             ){
-                val filteredList = mutableListOf<PokemonListOneItemData>()
-                list.itemSnapshotList.items.forEach {
-                    if (it.name.contains(pokeFilter.value))
-                        filteredList.add(it)
-                }
-                items(filteredList){
-                    PokeItem(item = it, navController = navController)
-                }
-                when(list.loadState.append){
-                    is LoadState.Loading->    Log.d("xdd", "LoadState[append] is Loading")
-                    is LoadState.NotLoading-> Log.d("xdd", "LoadState[append] is NotLoading")
-                    is LoadState.Error->      Log.d("xdd", "LoadState[append] is Error")
-                }
-                when(list.loadState.refresh){
-                    is LoadState.Loading->    Log.d("xdd", "LoadState[refresh] is Loading")
-                    is LoadState.NotLoading-> Log.d("xdd", "LoadState[refresh] is NotLoading")
-                    is LoadState.Error->      Log.d("xdd", "LoadState[refresh] is Error")
+                items(list.itemCount) {
+                    PokeItem(item = list[it]!!, navController = navController)
                 }
 
                 if (list.loadState.append is LoadState.Error
                     || list.loadState.refresh is LoadState.Error)
-                    item (
-                        span = { GridItemSpan(2)
-                        }
-                    ){ ErrorItem { list.refresh() } }
+                    item (span = { GridItemSpan(2) }){
+                        ErrorItem { list.refresh() }
+                    }
             }
 
 

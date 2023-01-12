@@ -9,6 +9,7 @@ import com.example.composeapplication.util.Resource
 
 class PokemonPagingSource(
     private val apiPokemonRepository: ApiPokemonRepository,
+    private val filter:String,
     private val aCountItemsOnOnePage:Int = 20
 ) :PagingSource<Int,PokemonListOneItemData>() {
     override fun getRefreshKey(state: PagingState<Int, PokemonListOneItemData>): Int? {
@@ -33,8 +34,19 @@ class PokemonPagingSource(
                     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
                 )
             }
-            LoadResult.Page(
+            if (filter == "")
+                return LoadResult.Page(
                 data = list,
+                prevKey = prevKey,
+                nextKey = nextKey
+            )
+            val filteredList = mutableListOf<PokemonListOneItemData>()
+            list.forEach {
+                if (it.name.contains(filter))
+                    filteredList.add(it)
+            }
+            LoadResult.Page(
+                data = filteredList,
                 prevKey = prevKey,
                 nextKey = nextKey
             )
