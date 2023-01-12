@@ -8,7 +8,8 @@ import com.example.composeapplication.ui.PokemonListOneItemData
 import com.example.composeapplication.util.Resource
 
 class PokemonPagingSource(
-    private val apiPokemonRepository: ApiPokemonRepository
+    private val apiPokemonRepository: ApiPokemonRepository,
+    private val aCountItemsOnOnePage:Int = 20
 ) :PagingSource<Int,PokemonListOneItemData>() {
     override fun getRefreshKey(state: PagingState<Int, PokemonListOneItemData>): Int? {
         return null
@@ -17,10 +18,13 @@ class PokemonPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonListOneItemData> {
         val page = params.key ?: 0
         return runCatching {
-            val result = apiPokemonRepository.getPokemonPage(20, page*20)
-            require(result is Resource.Success)
+            val result = apiPokemonRepository.getPokemonPage(
+                limit = aCountItemsOnOnePage,
+                offset = page * aCountItemsOnOnePage
+            )
+            require(result is Resource.Success && result.data != null)
             val prevKey = if (page==0) null else page.minus(1)
-            val nextKey = if (page*20 > result.data?.count!!) null else page.plus(1)
+            val nextKey = if (page*20 > result.data.count) null else page.plus(1)
             val list = result.data.listOfPokemon.map {
                 val id = it.url.drop(34).dropLast(1).toInt()
                 PokemonListOneItemData(

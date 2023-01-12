@@ -1,17 +1,22 @@
 package com.example.composeapplication.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -23,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.example.composeapplication.ui.PokemonListOneItemData
 
@@ -32,40 +36,70 @@ fun PokeListScreen(
     navController: NavController,
     list:LazyPagingItems<PokemonListOneItemData>
 ){
+    val pokeFilter = rememberSaveable {
+        mutableStateOf("")
+    }
     Box (
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         Column (modifier = Modifier.fillMaxWidth()) {
-            SearchBar(
-                onTextEdited = {
-                TODO()
-                }
-            )
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
+            SearchBar(onTextEdited = { pokeFilter.value = it })
+            LazyVerticalGrid(
+                modifier = Modifier.fillMaxSize(),
+                columns = GridCells.Fixed(2)
             ){
-                items(list){item ->
-                    PokeItem(item!!,navController)
+                val filteredList = mutableListOf<PokemonListOneItemData>()
+                list.itemSnapshotList.items.forEach {
+                    if (it.name.contains(pokeFilter.value))
+                        filteredList.add(it)
+                }
+                items(filteredList){
+                    PokeItem(item = it, navController = navController)
+                }
+                when(list.loadState.append){
+                    is LoadState.Loading->    Log.d("xdd", "LoadState[append] is Loading")
+                    is LoadState.NotLoading-> Log.d("xdd", "LoadState[append] is NotLoading")
+                    is LoadState.Error->      Log.d("xdd", "LoadState[append] is Error")
+                }
+                when(list.loadState.refresh){
+                    is LoadState.Loading->    Log.d("xdd", "LoadState[refresh] is Loading")
+                    is LoadState.NotLoading-> Log.d("xdd", "LoadState[refresh] is NotLoading")
+                    is LoadState.Error->      Log.d("xdd", "LoadState[refresh] is Error")
                 }
 
-                if (list.loadState.refresh is LoadState.Error)
-                    item{
-                        ErrorItem()
-                    }
+                if (list.loadState.append is LoadState.Error
+                    || list.loadState.refresh is LoadState.Error)
+                    item (
+                        span = { GridItemSpan(2)
+                        }
+                    ){ ErrorItem { list.refresh() } }
             }
+
+
         }
     }
 }
 
 @Composable
-fun ErrorItem() {
+fun ErrorItem(
+    onRetry: () -> Unit
+) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(50.dp)
-        .background(Color.Red)) {
-
+        .background(Color.Red),
+        contentAlignment = Alignment.Center
+    ){
+        Button(
+            onClick = { onRetry() }
+        ){
+            Text(
+                textAlign = TextAlign.Center,
+                text = "Обновить"
+            )
+        }
     }
 }
 
@@ -81,7 +115,6 @@ fun PokeItem(
             .clickable {
                 navController.navigate("poke_info/${item.id}")
             },
-        shape = CircleShape,
         elevation = 5.dp,
         border = BorderStroke(3.dp,Color.DarkGray)
     ) {
@@ -94,7 +127,6 @@ fun PokeItem(
                 model = item.imageUrl,
                 placeholder = painterResource(com.example.composeapplication.R.drawable.pokeball_place_holder),
                 contentDescription = item.name,
-
             )
             Text(
                 textAlign = TextAlign.Center,
@@ -113,12 +145,13 @@ fun PokeItem(
 fun SearchBar(
     onTextEdited: (String) -> Unit
 ){
-    val text = remember {
+    val text = rememberSaveable {
         mutableStateOf("")
     }
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(6.dp)) {
+
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,14 +159,12 @@ fun SearchBar(
                 .background(Color.White, CircleShape),
             value = text.value,
             onValueChange = {
-                text.value = it
-                onTextEdited(it)
+                text.value = it.lowercase()
+                onTextEdited(it.lowercase())
             },
             singleLine = true,
-            textStyle = TextStyle(color = Color.Green),
+            textStyle = TextStyle(color = Color.Black),
             label = { Text(text = "Поиск") }
         )
-
-
     }
 }

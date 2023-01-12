@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeApplicationTheme(){
+            ComposeApplicationTheme {
                 val hostController = rememberNavController()
                 NavHost(
                     navController = hostController,
