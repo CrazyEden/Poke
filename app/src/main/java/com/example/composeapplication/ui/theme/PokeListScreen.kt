@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -33,16 +34,12 @@ import com.example.composeapplication.ui.PokemonListOneItemData
 @Composable
 fun PokeListScreen(
     navController: NavController,
-    vModel: MainViewModel
+    vModel:MainViewModel = hiltViewModel()
 ){
     val pokeFilter = rememberSaveable {
         mutableStateOf("")
     }
-    val list = vModel.pokemonPaging(pokeFilter.value).collectAsLazyPagingItems()
-//    val a = rememberSaveable {
-//        mutableStateOf(vModel.pokemonPaging(pokeFilter.value))
-//    }
-//    a.value.collectAsLazyPagingItems()
+    val list = vModel.getPokeListPaging(pokeFilter.value).collectAsLazyPagingItems()
     Box (
         modifier = Modifier
             .fillMaxSize()

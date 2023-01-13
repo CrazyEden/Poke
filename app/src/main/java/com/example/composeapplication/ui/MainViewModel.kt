@@ -1,23 +1,45 @@
 package com.example.composeapplication.ui
 
-import androidx.lifecycle.*
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.composeapplication.data.PokemonPagingSource
-import com.example.composeapplication.domain.model.onePokemonResponse.OnePokemonResponse
 import com.example.composeapplication.domain.repositories.ApiPokemonRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val apiPokemonRepository: ApiPokemonRepository
 ):ViewModel() {
+    init {
+        Log.w("xdd", "MainViewModel INIT: ", )
+    }
 
-    private val _pokemonLiveData = MutableLiveData<OnePokemonResponse>()
-    val pokemonResponse:LiveData<OnePokemonResponse> = _pokemonLiveData
+    override fun onCleared() {
+        Log.w("xdd", "MainViewModel CLEARED", )
+        super.onCleared()
+    }
 
-    fun pokemonPaging(filter:String) =
-        Pager(
+    /*
+    *   api havent filter pokemon and to create new filtered flow requiere fun,
+    *   but fun cant save state
+    *   in order to avoid recreate the same flow has this fun
+    */
+    fun getPokeListPaging(filter: String): Flow<PagingData<PokemonListOneItemData>> {
+        return if (flow != null && this.filter==filter) flow!!
+        else createNewFlow(filter)
+    }
+    private var filter:String = "ёёёёё"
+    private var flow: Flow<PagingData<PokemonListOneItemData>>? = null
+    private fun createNewFlow(filter: String): Flow<PagingData<PokemonListOneItemData>> {
+        this.filter = filter
+        flow = Pager(
             PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = false
@@ -28,14 +50,7 @@ class MainViewModel(
                 filter = filter
             )
         }.flow.cachedIn(viewModelScope)
-
-    class Factory @Inject constructor(
-        private val apiPokemonRepository: ApiPokemonRepository
-    ):ViewModelProvider.Factory{
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            modelClass.isAssignableFrom(MainViewModel::class.java)
-            @Suppress("UNCHECKED_CAST")
-            return MainViewModel(apiPokemonRepository) as T
-        }
+        return flow!!
     }
+
 }

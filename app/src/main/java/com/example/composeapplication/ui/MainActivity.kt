@@ -3,23 +3,25 @@ package com.example.composeapplication.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.composeapplication.appComponent
 import com.example.composeapplication.ui.theme.ComposeApplicationTheme
 import com.example.composeapplication.ui.theme.PokeListScreen
-import javax.inject.Inject
+import com.example.composeapplication.ui.theme.PokemonInfoScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var factory: MainViewModel.Factory
-    private val vModel by viewModels<MainViewModel>{ factory }
+//    @Inject
+//    lateinit var factory: MainViewModel.Factory
+//    @Inject
+//    lateinit var factory2: PokeInfoViewModel.Factory.Factoryy
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        appComponent.inject(this)
+//        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
@@ -30,8 +32,7 @@ class MainActivity : ComponentActivity() {
                 ){
                     composable(route = "poke_list"){
                         PokeListScreen(
-                            navController = hostController,
-                            vModel
+                            navController = hostController
                         )
                     }
                     composable(
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         )
                     ){
                         val pokeId = it.arguments?.getInt("pokemonId") ?: throw NullPointerException("required id")
+                        PokemonInfoScreen(pokeId)
                     }
                 }
             }
