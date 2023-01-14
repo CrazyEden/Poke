@@ -1,12 +1,11 @@
 package com.example.composeapplication.ui.pokemoninfoscreen
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Card
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.composeapplication.R
 import com.example.composeapplication.ui.model.PokemonInfoData
@@ -30,13 +28,17 @@ import com.example.composeapplication.util.Resource
 
 @Composable
 fun PokemonInfoScreen(
-    navControler: NavHostController,
     pokeId: Int,
     vModel: PokeInfoViewModel
 ) {
     val data = vModel.pokeInfoFlow.collectAsState()
     Box(Modifier
         .fillMaxSize()
+        .background(Color.White)
+        .padding(15.dp)
+        .verticalScroll(rememberScrollState())
+        .offset(y=50.dp)
+        .padding(bottom = 50.dp)
     ) {
         Log.d("xdd", "${data.value.data?.name} ${data.value.message}")
         when(data.value){
@@ -57,17 +59,12 @@ fun PokemonInfoScreen(
 
 @Composable
 private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.DarkGray)
-        .padding(top = 50.dp)
-        .padding(15.dp)
-        .border(2.dp, Color.DarkGray, RoundedCornerShape(5.dp))
+    Card(modifier = Modifier
+        .fillMaxSize(),
+        elevation = 4.dp
     ){
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+            modifier = Modifier.fillMaxSize().padding(7.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
             AsyncImage(
                 modifier = Modifier.size(200.dp),
@@ -78,6 +75,7 @@ private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
             Text(
                 text = data.name,
                 style = TextStyle(
+                    color = Color.Black,
                     fontSize = 25.sp,
                     shadow = Shadow(blurRadius = 1f)
                 )
@@ -95,13 +93,20 @@ private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
                         text = it,
                         style = TextStyle(
                             fontSize = 18.sp,
-                            shadow = Shadow(blurRadius = 1f)
+                            shadow = Shadow(blurRadius = 1f),
+                            color = Color.Black
                         )
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height( 20.dp))
+            /* base stats */
+            Text(
+                text = "Базовые характеристики",
+                style = TextStyle(fontSize = 15.sp,color = Color.Black)
+            )
+            Spacer(modifier = Modifier.height(5.dp))
             data.baseStats.forEach { (t, u) ->
                 Box{
                     LinearProgressIndicator(
@@ -115,7 +120,7 @@ private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
                     Text(modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 9.dp),
-                        text = t,
+                        text = t.replaceFirstChar { it.uppercaseChar() },
                         textAlign = TextAlign.Start
                     )
                     Text(modifier = Modifier
@@ -134,8 +139,77 @@ private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
 
 @Composable
 private fun PokemonInfoScreenLoadingState(){
-    CircularProgressIndicator()
+    Card(modifier = Modifier
+        .fillMaxSize(),
+        elevation = 15.dp
+    ){
+        Column(
+            modifier = Modifier.fillMaxSize().padding(7.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                modifier = Modifier.size(200.dp),
+                painter = painterResource(R.drawable.pokeball_place_holder),
+                contentDescription = ""
+            )
+            Text(
+                text = "",
+                style = TextStyle(
+                    fontSize = 25.sp,
+                    shadow = Shadow(blurRadius = 1f)
+                )
+            )
+            Spacer(modifier = Modifier.height( 20.dp))
+            /* detailsShowingTypes */
+            Row() {
+                repeat(2) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                            .border(1.dp, Color.Red, RoundedCornerShape(50))
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                            .padding(horizontal = 40.dp),
+                        text = "",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            shadow = Shadow(blurRadius = 1f)
+                        )
+                    )
+                }
+            }
 
+            Spacer(modifier = Modifier.height( 20.dp))
+            /* base stats */
+            Text(text = "Базовые характеристики", style = TextStyle(fontSize = 15.sp, color = Color.Black))
+            Spacer(modifier = Modifier.height(5.dp))
+            repeat(6) {
+                Box{
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                            .shadow(10.dp, RoundedCornerShape(8.dp)),
+                        color = Color.Magenta
+                    )
+                    Text(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 9.dp),
+                        text = "",
+                        textAlign = TextAlign.Start,
+                        style = TextStyle(color = Color.Black)
+                    )
+                    Text(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 9.dp),
+                        text = "",
+                        textAlign = TextAlign.End,
+                        style = TextStyle(color = Color.Black)
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+        }
+    }
 }
 
 @Composable
@@ -144,8 +218,7 @@ private fun PokemonInfoScreenErrorState(
     callback: () -> Unit
 ){
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

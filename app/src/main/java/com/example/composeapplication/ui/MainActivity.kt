@@ -17,13 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//    @Inject
-//    lateinit var factory: PokeListModel.Factory
-//    @Inject
-//    lateinit var factory2: PokeInfoViewModel.Factory.Factoryy
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
@@ -50,7 +45,6 @@ class MainActivity : ComponentActivity() {
                         val vModel:PokeInfoViewModel = hiltViewModel()
                         vModel.loadPokemonInfoData(pokeId)
                         PokemonInfoScreen(
-                            navControler = hostController,
                             pokeId = pokeId,
                             vModel = vModel
                         )
