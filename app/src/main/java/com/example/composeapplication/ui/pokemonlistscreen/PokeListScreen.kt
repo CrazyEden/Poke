@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui.theme
+package com.example.composeapplication.ui.pokemonlistscreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -28,13 +28,12 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import com.example.composeapplication.ui.MainViewModel
-import com.example.composeapplication.ui.PokemonListOneItemData
+import com.example.composeapplication.ui.model.PokemonListOneItemData
 
 @Composable
 fun PokeListScreen(
     navController: NavController,
-    vModel:MainViewModel = hiltViewModel()
+    vModel: PokeListModel = hiltViewModel()
 ){
     val pokeFilter = rememberSaveable {
         mutableStateOf("")

@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui
+package com.example.composeapplication.ui.pokemonlistscreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,20 +9,21 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.composeapplication.data.PokemonPagingSource
 import com.example.composeapplication.domain.repositories.ApiPokemonRepository
+import com.example.composeapplication.ui.model.PokemonListOneItemData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class PokeListModel @Inject constructor(
     private val apiPokemonRepository: ApiPokemonRepository
 ):ViewModel() {
     init {
-        Log.w("xdd", "MainViewModel INIT: ", )
+        Log.w("xdd", "PokeListModel INIT: ", )
     }
 
     override fun onCleared() {
-        Log.w("xdd", "MainViewModel CLEARED", )
+        Log.w("xdd", "PokeListModel CLEARED", )
         super.onCleared()
     }
 

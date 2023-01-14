@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui
+package com.example.composeapplication.ui.model
 
 data class PokemonListOneItemData(
     val id:Int,

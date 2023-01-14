@@ -1,5 +1,6 @@
-package com.example.composeapplication.ui.theme
+package com.example.composeapplication.ui.pokemoninfoscreen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -9,7 +10,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -20,49 +21,37 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.composeapplication.R
-import com.example.composeapplication.ui.PokeInfoViewModel
-import com.example.composeapplication.ui.PokemonInfoData
+import com.example.composeapplication.ui.model.PokemonInfoData
 import com.example.composeapplication.util.Resource
+
 
 @Composable
 fun PokemonInfoScreen(
-    pokeId: Int
+    navControler: NavHostController,
+    pokeId: Int,
+    vModel: PokeInfoViewModel
 ) {
-    val vModel: PokeInfoViewModel = hiltViewModel()
-    val data = produceState<Resource<PokemonInfoData>>(initialValue = Resource.Loading()){
-        val tempData = vModel.getPokemonInfoData(pokeId).data!!
-        val pokeInfoData = PokemonInfoData.fromOnePokemonResponse(tempData)
-        value = Resource.Success(pokeInfoData)
-    }.value
+    val data = vModel.pokeInfoFlow.collectAsState()
     Box(Modifier
         .fillMaxSize()
     ) {
-
-
-            if (pokeId == 1) PokemonInfoScreenLoadingState()
-            else if (pokeId == 2) PokemonInfoScreenErrorState {
-
+        Log.d("xdd", "${data.value.data?.name} ${data.value.message}")
+        when(data.value){
+            is Resource.Success->{
+                PokemonInfoScreenFieldState(data.value.data!!)
             }
-            else
-            when(data){
-                is Resource.Success->{
-                    PokemonInfoScreenFieldState(data.data!!)
-                }
-                is Resource.Loading->{
-                    PokemonInfoScreenLoadingState()
-                }
-                is Resource.Error->{
-                    PokemonInfoScreenErrorState{
-                        TODO()
-                    }
+            is Resource.Loading->{
+                PokemonInfoScreenLoadingState()
+            }
+            is Resource.Error->{
+                PokemonInfoScreenErrorState(data.value.message!!){
+                    vModel.loadPokemonInfoData(pokeId)
                 }
             }
-
-
-
+        }
     }
 }
 
@@ -151,11 +140,23 @@ private fun PokemonInfoScreenLoadingState(){
 
 @Composable
 private fun PokemonInfoScreenErrorState(
+    message:String,
     callback: () -> Unit
 ){
-    Button(
-        onClick = { callback() }
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Обновить", textAlign = TextAlign.Center)
+        Box{
+            Button(onClick = { callback() })
+            { Text(text = "Обновить", textAlign = TextAlign.Center) }
+        }
+        Text(
+            text = message,
+            textAlign = TextAlign.Center,
+            style = TextStyle(color = Color.Red, fontSize = 14.sp)
+        )
     }
 }

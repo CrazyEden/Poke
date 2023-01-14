@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui
+package com.example.composeapplication.ui.model
 
 import com.example.composeapplication.domain.model.onePokemonResponse.OnePokemonResponse
 
@@ -10,7 +10,7 @@ data class PokemonInfoData(
     val baseStats:Map<String,Int>
 ){
     companion object{
-        fun fromOnePokemonResponse(onePokemonResponse: OnePokemonResponse):PokemonInfoData{
+        fun fromOnePokemonResponse(onePokemonResponse: OnePokemonResponse): PokemonInfoData {
 
             return PokemonInfoData(
                 id = onePokemonResponse.id,

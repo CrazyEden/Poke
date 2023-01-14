@@ -4,14 +4,14 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.composeapplication.domain.repositories.ApiPokemonRepository
-import com.example.composeapplication.ui.PokemonListOneItemData
+import com.example.composeapplication.ui.model.PokemonListOneItemData
 import com.example.composeapplication.util.Resource
 
 class PokemonPagingSource(
     private val apiPokemonRepository: ApiPokemonRepository,
     private val filter:String,
     private val aCountItemsOnOnePage:Int = 20
-) :PagingSource<Int,PokemonListOneItemData>() {
+) :PagingSource<Int, PokemonListOneItemData>() {
     override fun getRefreshKey(state: PagingState<Int, PokemonListOneItemData>): Int? {
         return null
     }
