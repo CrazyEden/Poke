@@ -28,11 +28,7 @@ class PokeInfoViewModel @Inject constructor (
     val pokeInfoFlow = _pokeInfoFlow.asStateFlow()
     fun loadPokemonInfoData(pokemonId: Int) {
         viewModelScope.launch {
-            val data =
-                if (pokemonId == 1) Resource.Loading()
-                else if (pokemonId == 2) Resource.Error("TEST ERROR")
-                else//1 & 2 id is for testing ui TODO(REMOVE)
-                runCatching {
+            val data = runCatching {
                 val response = apiPokemonRepository.getOnePokemon(pokemonId)
                 if (response is Resource.Success) {
                     val pokeInfo = PokemonInfoData.fromOnePokemonResponse(response.data!!)

@@ -60,8 +60,21 @@ class MainActivity : ComponentActivity() {
                                 vModel = vModel
                             )
                         }
-                        composable("item_list"){ ItemsList(hostController = hostController)}
-                        composable("item_info"){ ItemInfoScreen()}
+                        composable(route ="item_list"){ ItemsListScreen(hostController = hostController)}
+                        composable(route ="item_info/{itemName}", arguments = listOf(
+                            navArgument("itemName"){
+                                type = NavType.StringType
+                                nullable = false
+                            }
+                        )){
+                            val itemName = it.arguments?.getString("itemName") ?: throw NullPointerException()
+                            val vModel:ItemInfoViewModel = hiltViewModel()
+                            vModel.loadItemInfo(itemName)
+                            ItemInfoScreen(
+                                itemName = itemName,
+                                vModel = vModel
+                            )
+                        }
                     }
                     BMenu(navHostController = hostController)
                 }
