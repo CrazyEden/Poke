@@ -19,8 +19,8 @@ interface ApiPokemon {
         @Query("offset") offset:Int
     ):Response<PokemonPage>
 
-    @GET("item/{id}")
-    suspend fun getItem(@Path("name") id:String): Response<OneItemResponse>
+    @GET("item/{name}")
+    suspend fun getItem(@Path("name") name:String): Response<OneItemResponse>
 
     @GET("item")
     suspend fun getItemsPage(

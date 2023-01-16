@@ -94,7 +94,7 @@ private fun BMenu(
         BottomNavigationItem(
             selected = isPokeTapSelected,
             onClick = {
-                navHostController.navigate(route = "poke_list")
+                navHostController.navigate(route = "poke_list"){ popUpTo(0) }
             },
             icon = {
                 BadgedBox(
@@ -119,7 +119,7 @@ private fun BMenu(
         BottomNavigationItem(
             selected = isItemTabSelected,
             onClick = {
-                navHostController.navigate(route = "item_list")
+                navHostController.navigate(route = "item_list"){ popUpTo(0) }
             },
             icon = {
                 BadgedBox(

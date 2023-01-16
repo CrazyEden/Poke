@@ -42,12 +42,8 @@ fun PokemonInfoScreen(
     ) {
         Log.d("xdd", "${data.value.data?.name} ${data.value.message}")
         when(data.value){
-            is Resource.Success->{
-                PokemonInfoScreenFieldState(data.value.data!!)
-            }
-            is Resource.Loading->{
-                PokemonInfoScreenLoadingState()
-            }
+            is Resource.Success -> PokemonInfoScreenFieldState(data.value.data!!)
+            is Resource.Loading -> PokemonInfoScreenLoadingState()
             is Resource.Error->{
                 PokemonInfoScreenErrorState(data.value.message!!){
                     vModel.loadPokemonInfoData(pokeId)
@@ -213,7 +209,7 @@ private fun PokemonInfoScreenLoadingState(){
 }
 
 @Composable
-private fun PokemonInfoScreenErrorState(
+fun PokemonInfoScreenErrorState(
     message:String,
     callback: () -> Unit
 ){
