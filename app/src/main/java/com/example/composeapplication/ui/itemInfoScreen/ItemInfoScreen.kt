@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui
+package com.example.composeapplication.ui.itemInfoScreen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -29,7 +29,7 @@ fun ItemInfoScreen(
     vModel: ItemInfoViewModel = hiltViewModel(),
     itemName: String,
 ){
-    val data = vModel.flow.collectAsState()
+    val data = vModel.getItemInfoFlow().collectAsState()
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)

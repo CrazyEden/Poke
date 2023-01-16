@@ -31,13 +31,13 @@ fun PokemonInfoScreen(
     pokeId: Int,
     vModel: PokeInfoViewModel
 ) {
-    val data = vModel.pokeInfoFlow.collectAsState()
+    val data = vModel.getFlow().collectAsState()
     Box(Modifier
         .fillMaxSize()
         .background(Color.White)
         .padding(15.dp)
         .verticalScroll(rememberScrollState())
-        .offset(y=50.dp)
+        .offset(y = 50.dp)
         .padding(bottom = 50.dp)
     ) {
         Log.d("xdd", "${data.value.data?.name} ${data.value.message}")
@@ -60,7 +60,9 @@ private fun PokemonInfoScreenFieldState(data: PokemonInfoData){
         elevation = 4.dp
     ){
         Column(
-            modifier = Modifier.fillMaxSize().padding(7.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(7.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
             AsyncImage(
                 modifier = Modifier.size(200.dp),
@@ -140,7 +142,9 @@ private fun PokemonInfoScreenLoadingState(){
         elevation = 15.dp
     ){
         Column(
-            modifier = Modifier.fillMaxSize().padding(7.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(7.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 modifier = Modifier.size(200.dp),

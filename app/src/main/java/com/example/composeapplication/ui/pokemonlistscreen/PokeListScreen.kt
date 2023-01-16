@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import com.example.composeapplication.ui.LoadItem
+import com.example.composeapplication.ui.itemsListScreen.LoadItem
 import com.example.composeapplication.ui.model.PokemonListOneItemData
 
 @Composable
@@ -39,7 +39,7 @@ fun PokeListScreen(
     val pokeFilter = rememberSaveable {
         mutableStateOf("")
     }
-    val list = vModel.getPokeListPaging(pokeFilter.value).collectAsLazyPagingItems()
+    val list = vModel.getPokeListPagingFlow(pokeFilter.value).collectAsLazyPagingItems()
     Box (
         modifier = Modifier
             .fillMaxSize()

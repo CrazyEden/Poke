@@ -22,6 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composeapplication.R
+import com.example.composeapplication.ui.itemInfoScreen.ItemInfoScreen
+import com.example.composeapplication.ui.itemInfoScreen.ItemInfoViewModel
+import com.example.composeapplication.ui.itemsListScreen.ItemsListScreen
 import com.example.composeapplication.ui.pokemoninfoscreen.PokeInfoViewModel
 import com.example.composeapplication.ui.pokemoninfoscreen.PokemonInfoScreen
 import com.example.composeapplication.ui.pokemonlistscreen.PokeListScreen
@@ -60,7 +63,7 @@ class MainActivity : ComponentActivity() {
                                 vModel = vModel
                             )
                         }
-                        composable(route ="item_list"){ ItemsListScreen(hostController = hostController)}
+                        composable(route ="item_list"){ ItemsListScreen(hostController = hostController) }
                         composable(route ="item_info/{itemName}", arguments = listOf(
                             navArgument("itemName"){
                                 type = NavType.StringType
@@ -68,7 +71,7 @@ class MainActivity : ComponentActivity() {
                             }
                         )){
                             val itemName = it.arguments?.getString("itemName") ?: throw NullPointerException()
-                            val vModel:ItemInfoViewModel = hiltViewModel()
+                            val vModel: ItemInfoViewModel = hiltViewModel()
                             vModel.loadItemInfo(itemName)
                             ItemInfoScreen(
                                 itemName = itemName,

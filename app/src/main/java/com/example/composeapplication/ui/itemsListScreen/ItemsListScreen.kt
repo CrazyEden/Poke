@@ -1,4 +1,4 @@
-package com.example.composeapplication.ui
+package com.example.composeapplication.ui.itemsListScreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,7 +26,7 @@ import com.example.composeapplication.ui.pokemonlistscreen.SearchBar
 @Composable
 fun ItemsListScreen(
     hostController: NavHostController,
-    vModel:ItemsLiseViewModel = hiltViewModel()
+    vModel: ItemsLiseViewModel = hiltViewModel()
 ) {
     val filter = rememberSaveable() {
         mutableStateOf("")
