@@ -5,14 +5,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.composeapplication.data.ItemsPagingSource
-import com.example.composeapplication.domain.repositories.ApiPokemonRepository
+import com.example.composeapplication.domain.usecase.GetItemsPageUseCase
 import com.example.composeapplication.ui.model.ItemsListOneItemData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ItemListCommunicationImpl @Inject constructor(
-    private val apiPokemonRepository: ApiPokemonRepository
+    private val getItemsPageUseCase: GetItemsPageUseCase
 ) : ItemsListCommunication {
     private var filter:String? = null
     private var flow: Flow<PagingData<ItemsListOneItemData>>? = null
@@ -31,7 +31,7 @@ class ItemListCommunicationImpl @Inject constructor(
             )
         ){
             ItemsPagingSource(
-                apiPokemonRepository = apiPokemonRepository,
+                getItemsPageUseCase = getItemsPageUseCase,
                 filter = filter
             )
         }.flow.cachedIn(scope)

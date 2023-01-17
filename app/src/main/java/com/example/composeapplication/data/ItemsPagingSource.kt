@@ -2,12 +2,12 @@ package com.example.composeapplication.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.composeapplication.domain.repositories.ApiPokemonRepository
+import com.example.composeapplication.domain.usecase.GetItemsPageUseCase
 import com.example.composeapplication.ui.model.ItemsListOneItemData
 import com.example.composeapplication.util.Resource
 
 class ItemsPagingSource (
-    private val apiPokemonRepository: ApiPokemonRepository,
+    private val getItemsPageUseCase: GetItemsPageUseCase,
     private val filter:String,
     private val itemsOnPage:Int = 20
 ) : PagingSource<Int,ItemsListOneItemData>() {
@@ -18,7 +18,7 @@ class ItemsPagingSource (
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ItemsListOneItemData> {
         val page = params.key ?: 0
         return runCatching {
-            val res = apiPokemonRepository.getItemsPage(itemsOnPage, page * itemsOnPage)
+            val res = getItemsPageUseCase.execute(itemsOnPage, page * itemsOnPage)
             require(res is Resource.Success && res.data!=null &&res.data.results !=null)
             val prevKey = if (page==0) null else page.minus(1)
             val nextKey = if (page*20 > res.data.count!!) null else page.plus(1)
