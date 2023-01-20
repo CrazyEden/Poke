@@ -8,5 +8,9 @@ import javax.inject.Inject
 class GetPokemonPageUseCase @Inject constructor(
     private val apiPokemonRepository: ApiPokemonRepository
 ) {
-    suspend fun execute(limit:Int,offset:Int): Resource<PokemonPage> = apiPokemonRepository.getPokemonPage(limit,offset)
+    suspend fun execute(limit:Int,offset:Int): Resource<PokemonPage> {
+        if (limit < 1) throw IllegalArgumentException()
+        if (offset<0) throw IllegalArgumentException()
+        return apiPokemonRepository.getPokemonPage(limit, offset)
+    }
 }

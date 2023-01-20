@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GameIndice(
     @SerializedName("game_index")
-    val gameIndex: Int?,
+    val gameIndex: Int? = null,
     @SerializedName("generation")
-    val generation: Generation?
+    val generation: Generation? = null
 )

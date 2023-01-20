@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName
 
 data class Versions(
     @SerializedName("generation-i")
-    val generationI: GenerationI,
+    val generationI: GenerationI? = GenerationI(),
     @SerializedName("generation-ii")
-    val generationIi: GenerationIi,
+    val generationIi: GenerationIi? = GenerationIi(),
     @SerializedName("generation-iii")
-    val generationIii: GenerationIii,
+    val generationIii: GenerationIii? = GenerationIii(),
     @SerializedName("generation-iv")
-    val generationIv: GenerationIv,
+    val generationIv: GenerationIv? = GenerationIv(),
     @SerializedName("generation-v")
-    val generationV: GenerationV,
+    val generationV: GenerationV? = GenerationV(),
     @SerializedName("generation-vi")
-    val generationVi: GenerationVi,
+    val generationVi: GenerationVi? = GenerationVi(),
     @SerializedName("generation-vii")
-    val generationVii: GenerationVii,
+    val generationVii: GenerationVii? = GenerationVii(),
     @SerializedName("generation-viii")
-    val generationViii: GenerationViii
+    val generationViii: GenerationViii? = GenerationViii()
 )

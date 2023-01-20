@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TypeX(
     @SerializedName("name")
-    val name: String,
+    val name: String? = null,
     @SerializedName("url")
-    val url: String
+    val url: String? = null
 )

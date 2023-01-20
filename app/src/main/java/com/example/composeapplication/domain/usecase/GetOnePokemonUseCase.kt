@@ -8,5 +8,8 @@ import javax.inject.Inject
 class GetOnePokemonUseCase @Inject constructor(
     private val apiPokemonRepository: ApiPokemonRepository
 ) {
-    suspend fun execute(id:Int): Resource<OnePokemonResponse> = apiPokemonRepository.getOnePokemon(id)
+    suspend fun execute(id:Int): Resource<OnePokemonResponse> {
+        if (id<0) throw IllegalArgumentException()
+        return apiPokemonRepository.getOnePokemon(id)
+    }
 }

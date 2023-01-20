@@ -13,11 +13,11 @@ data class PokemonInfoData(
         fun fromOnePokemonResponse(onePokemonResponse: OnePokemonResponse): PokemonInfoData {
 
             return PokemonInfoData(
-                id = onePokemonResponse.id,
-                name = onePokemonResponse.name,
-                imageUrl = onePokemonResponse.sprites.frontDefault,
-                detailsShowingTypes = onePokemonResponse.types.map { it.type.name },
-                baseStats = onePokemonResponse.stats.associate { it.stat.name to it.baseStat }
+                id = onePokemonResponse.id!!,
+                name = onePokemonResponse.name!!,
+                imageUrl = onePokemonResponse.sprites?.frontDefault!!,
+                detailsShowingTypes = onePokemonResponse.types?.map { it.type?.name!! }!!,
+                baseStats = onePokemonResponse.stats?.associate { it.stat?.name!! to it.baseStat!! }!!
             )
         }
     }

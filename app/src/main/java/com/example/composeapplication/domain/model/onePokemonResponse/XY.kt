@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class XY(
     @SerializedName("front_default")
-    val frontDefault: String,
+    val frontDefault: String? = null,
     @SerializedName("front_female")
-    val frontFemale: Any,
+    val frontFemale: Any? = null,
     @SerializedName("front_shiny")
-    val frontShiny: String,
+    val frontShiny: String? = null,
     @SerializedName("front_shiny_female")
-    val frontShinyFemale: Any
+    val frontShinyFemale: Any? = null
 )

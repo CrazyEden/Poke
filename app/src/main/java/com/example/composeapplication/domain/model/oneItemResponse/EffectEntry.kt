@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class EffectEntry(
     @SerializedName("effect")
-    val effect: String?,
+    val effect: String? = null,
     @SerializedName("language")
-    val language: Language?,
+    val language: Language? = null,
     @SerializedName("short_effect")
-    val shortEffect: String?
+    val shortEffect: String? = null
 )

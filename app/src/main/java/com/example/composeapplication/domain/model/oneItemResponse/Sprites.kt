@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Sprites(
     @SerializedName("default")
-    val default: String?
+    val default: String? = null
 )

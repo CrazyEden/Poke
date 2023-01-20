@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Icons(
     @SerializedName("front_default")
-    val frontDefault: String,
+    val frontDefault: String? = null,
     @SerializedName("front_female")
-    val frontFemale: Any
+    val frontFemale: Any? = null
 )

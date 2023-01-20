@@ -25,7 +25,7 @@ class PokemonPagingSource(
             )
             require(result is Resource.Success && result.data != null)
             val prevKey = if (page==0) null else page.minus(1)
-            val nextKey = if (page*20 > result.data.count) null else page.plus(1)
+            val nextKey = if (page*20 > result.data.count!!) null else page.plus(1)
             val list = result.data.listOfPokemon.map {
                 val id = it.url.drop(34).dropLast(1).toInt()
                 PokemonListOneItemData(

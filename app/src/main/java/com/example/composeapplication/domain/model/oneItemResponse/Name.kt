@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Name(
     @SerializedName("language")
-    val language: Language?,
+    val language: Language? = Language(),
     @SerializedName("name")
-    val name: String?
+    val name: String? = ""
 )
