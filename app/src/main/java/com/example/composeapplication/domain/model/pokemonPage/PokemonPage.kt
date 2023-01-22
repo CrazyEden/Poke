@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class PokemonPage(
     @SerializedName("count")
-    val count: Int,
+    val count: Int? = null,
     @SerializedName("next")
-    val next: String?,
+    val next: String? = null,
     @SerializedName("previous")
-    val previous: String?,
+    val previous: String? = null,
     @SerializedName("results")
-    val listOfPokemon: List<ShortPokemonInfo>
+    val listOfPokemon: List<ShortPokemonInfo> = listOf()
 )

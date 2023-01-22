@@ -28,17 +28,18 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.example.composeapplication.ui.itemsListScreen.LoadItem
 import com.example.composeapplication.ui.model.PokemonListOneItemData
 
 @Composable
 fun PokeListScreen(
     navController: NavController,
-    vModel: PokeListModel = hiltViewModel()
+    vModel: PokeListViewModel = hiltViewModel()
 ){
     val pokeFilter = rememberSaveable {
         mutableStateOf("")
     }
-    val list = vModel.getPokeListPaging(pokeFilter.value).collectAsLazyPagingItems()
+    val list = vModel.getPokeListPagingFlow(pokeFilter.value).collectAsLazyPagingItems()
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -54,14 +55,18 @@ fun PokeListScreen(
                     PokeItem(item = list[it]!!, navController = navController)
                 }
 
+                if (list.loadState.append is LoadState.Loading){
+                    item(span = { GridItemSpan(2) }){
+                        LoadItem()
+                    }
+                }
+
                 if (list.loadState.append is LoadState.Error
                     || list.loadState.refresh is LoadState.Error)
                     item (span = { GridItemSpan(2) }){
                         ErrorItem { list.refresh() }
                     }
             }
-
-
         }
     }
 }

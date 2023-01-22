@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class GenerationIv(
     @SerializedName("diamond-pearl")
-    val diamondPearl: DiamondPearl,
+    val diamondPearl: DiamondPearl? = null,
     @SerializedName("heartgold-soulsilver")
-    val heartgoldSoulsilver: HeartgoldSoulsilver,
+    val heartgoldSoulsilver: HeartgoldSoulsilver? = null,
     @SerializedName("platinum")
-    val platinum: Platinum
+    val platinum: Platinum? = null
 )

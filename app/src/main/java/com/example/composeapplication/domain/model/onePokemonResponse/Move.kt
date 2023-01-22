@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Move(
     @SerializedName("move")
-    val move: MoveX,
+    val move: MoveX? = MoveX(),
     @SerializedName("version_group_details")
-    val versionGroupDetails: List<VersionGroupDetail>
+    val versionGroupDetails: List<VersionGroupDetail>? = listOf()
 )

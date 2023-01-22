@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class RedBlue(
     @SerializedName("back_default")
-    val backDefault: String,
+    val backDefault: String? = null,
     @SerializedName("back_gray")
-    val backGray: String,
+    val backGray: String? = null,
     @SerializedName("back_transparent")
-    val backTransparent: String,
+    val backTransparent: String? = null,
     @SerializedName("front_default")
-    val frontDefault: String,
+    val frontDefault: String? = null,
     @SerializedName("front_gray")
-    val frontGray: String,
+    val frontGray: String? = null,
     @SerializedName("front_transparent")
-    val frontTransparent: String
+    val frontTransparent: String? = null
 )

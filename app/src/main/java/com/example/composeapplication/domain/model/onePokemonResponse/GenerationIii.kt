@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class GenerationIii(
     @SerializedName("emerald")
-    val emerald: Emerald,
+    val emerald: Emerald? = null,
     @SerializedName("firered-leafgreen")
-    val fireredLeafgreen: FireredLeafgreen,
+    val fireredLeafgreen: FireredLeafgreen? = null,
     @SerializedName("ruby-sapphire")
-    val rubySapphire: RubySapphire
+    val rubySapphire: RubySapphire? = null
 )

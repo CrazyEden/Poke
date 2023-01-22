@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Other(
     @SerializedName("dream_world")
-    val dreamWorld: DreamWorld,
+    val dreamWorld: DreamWorld? = null,
     @SerializedName("home")
-    val home: Home,
+    val home: Home? = null,
     @SerializedName("official-artwork")
-    val officialArtwork: OfficialArtwork
+    val officialArtwork: OfficialArtwork? = null
 )

@@ -3,12 +3,12 @@ package com.example.composeapplication.data
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.composeapplication.domain.repositories.ApiPokemonRepository
+import com.example.composeapplication.domain.usecase.GetPokemonPageUseCase
 import com.example.composeapplication.ui.model.PokemonListOneItemData
 import com.example.composeapplication.util.Resource
 
 class PokemonPagingSource(
-    private val apiPokemonRepository: ApiPokemonRepository,
+    private val getPokemonPageUseCase: GetPokemonPageUseCase,
     private val filter:String,
     private val aCountItemsOnOnePage:Int = 20
 ) :PagingSource<Int, PokemonListOneItemData>() {
@@ -19,13 +19,13 @@ class PokemonPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonListOneItemData> {
         val page = params.key ?: 0
         return runCatching {
-            val result = apiPokemonRepository.getPokemonPage(
+            val result = getPokemonPageUseCase.execute(
                 limit = aCountItemsOnOnePage,
                 offset = page * aCountItemsOnOnePage
             )
             require(result is Resource.Success && result.data != null)
             val prevKey = if (page==0) null else page.minus(1)
-            val nextKey = if (page*20 > result.data.count) null else page.plus(1)
+            val nextKey = if (page*20 > result.data.count!!) null else page.plus(1)
             val list = result.data.listOfPokemon.map {
                 val id = it.url.drop(34).dropLast(1).toInt()
                 PokemonListOneItemData(

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Emerald(
     @SerializedName("front_default")
-    val frontDefault: String,
+    val frontDefault: String? = null,
     @SerializedName("front_shiny")
-    val frontShiny: String
+    val frontShiny: String? = null
 )

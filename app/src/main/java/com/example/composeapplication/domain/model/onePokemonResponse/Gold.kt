@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class Gold(
     @SerializedName("back_default")
-    val backDefault: String,
+    val backDefault: String? = null,
     @SerializedName("back_shiny")
-    val backShiny: String,
+    val backShiny: String? = null,
     @SerializedName("front_default")
-    val frontDefault: String,
+    val frontDefault: String? = null,
     @SerializedName("front_shiny")
-    val frontShiny: String,
+    val frontShiny: String? = null,
     @SerializedName("front_transparent")
-    val frontTransparent: String
+    val frontTransparent: String? = null
 )
